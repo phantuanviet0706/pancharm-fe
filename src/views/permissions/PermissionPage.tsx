@@ -15,13 +15,15 @@ export default function PermissionPage() {
 
 	const handleCreate = async (data: Partial<Permission>) => {
 		const res = await createPermission(data as Omit<Permission, 'id'>);
-		setPermissions([...permissions, res]);
+		const mock_result = (res && res.result) ? res.result : null;
+		setPermissions([...permissions, mock_result]);
 	};
 
 	const handleUpdate = async (data: Partial<Permission>) => {
 		if (!data.id) return;
 		const res = await updatePermission(data.id, data);
-		setPermissions(permissions.map((p) => (p.id === data.id ? res : p)));
+		const mock_result = (res && res.result) ? res.result : null;
+		setPermissions(permissions.map((p) => (p.id === mock_result.id ? mock_result : p)));
 	};
 
 	const handleDelete = async (id: number) => {
