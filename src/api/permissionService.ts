@@ -12,7 +12,9 @@ export interface Permission {
 export interface PermissionQuery {
 	page?: number;
 	limit?: number;
-	name?: string;
+	search?: string;
+	sortBy?: string;
+	sortOrder?: 'asc' | 'desc';
 }
 
 export const fetchData = async (query: PermissionQuery = {}) => {
@@ -23,6 +25,41 @@ export const fetchData = async (query: PermissionQuery = {}) => {
 		}
 	});
 
-	const res = await axios.get<{ data: Permission[]; total: number }>(`${API_URL}?${params.toString()}`);
-	return res.data;
+	try {
+		const res = await axios.get<{ data: Permission[]; total: number }>(`${API_URL}?${params.toString()}`);
+		return res.data;
+	} catch (error) {
+		console.error('Failed to fetch permissions', error);
+		throw error;
+	}
+};
+
+export const createPermission = async (payload: Omit<Permission, 'id'>) => {
+	try {
+		const res = await axios.post<Permission>(API_URL, payload);
+		return res.data;
+	} catch (error) {
+		console.error('Failed to create permission', error);
+		throw error;
+	}
+};
+
+export const updatePermission = async (id: number, payload: Partial<Permission>) => {
+	try {
+		const res = await axios.put<Permission>(`${API_URL}/${id}`, payload);
+		return res.data;
+	} catch (error) {
+		console.error('Failed to update permission', error);
+		throw error;
+	}
+};
+
+export const deletePermission = async (id: number) => {
+	try {
+		await axios.delete<Permission>(`${API_URL}/${id}`);
+		return true;
+	} catch (error) {
+		console.error('Failed to delete permission', error);
+		throw error;
+	}
 };

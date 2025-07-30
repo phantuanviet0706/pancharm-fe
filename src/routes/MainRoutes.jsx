@@ -17,6 +17,8 @@ const Register = lazy(() => import('../views/auth/register'));
 
 const Sample = lazy(() => import('../views/sample'));
 
+const PermissionPage = lazy(() => import('../views/permissions/PermissionPage'));
+
 const MainRoutes = {
 	path: '/',
 	children: [
@@ -52,6 +54,11 @@ const MainRoutes = {
 				{
 					path: '/sample-page',
 					element: <Sample />
+				},
+				
+				{
+					path: '/permissions',
+					element: <PermissionPage />
 				}
 			]
 		},
