@@ -1,44 +1,44 @@
 import { useMemo, useState } from 'react';
-import { usePermissions } from '../../hooks/usePermissions';
-import { createPermission, updatePermission, deletePermission, Permission } from '../../api/permissionService';
 import { Button, Pagination, TextField } from '@mui/material';
-import PermissionTable from './PermissionTable';
-import PermissionForm from './PermissionForm';
+import RoleTable from './RoleTable';
+import RoleForm from './RoleForm';
+import { useRoles } from 'hooks/useRoles';
+import { createRole, deleteRole, Role, updateRole } from 'api/roleService';
 
-export default function PermissionPage() {
+export default function RolePage() {
 	const [page, setPage] = useState(0);
 	const [searchText, setSearchText] = useState('');
 
 	const query = useMemo(() => ({ page, limit: 50, keyword: searchText }), [page, searchText]);
 
-	const { permissions, loading, error, setPermissions, total, totalPages } = usePermissions(query);
+	const { roles, loading, error, setRoles, total, totalPages } = useRoles(query);
 	const [formOpen, setFormOpen] = useState(false);
-	const [editData, setEditData] = useState<Permission | null>(null);
+	const [editData, setEditData] = useState<Role | null>(null);
 
-	const handleCreate = async (data: Partial<Permission>) => {
-		const res = await createPermission(data as Omit<Permission, 'id'>);
+	const handleCreate = async (data: Partial<Role>) => {
+		const res = await createRole(data as Omit<Role, 'id'>);
 		const mock_result = res && res.result ? res.result : null;
-		setPermissions([...permissions, mock_result]);
+		setRoles([...roles, mock_result]);
 	};
 
-	const handleUpdate = async (data: Partial<Permission>) => {
+	const handleUpdate = async (data: Partial<Role>) => {
 		if (!data.id) return;
-		const res = await updatePermission(data.id, data);
+		const res = await updateRole(data.id, data);
 		const mock_result = res && res.result ? res.result : null;
-		setPermissions(permissions.map((p) => (p.id === mock_result.id ? mock_result : p)));
+		setRoles(roles.map((p) => (p.id === mock_result.id ? mock_result : p)));
 	};
 
 	const handleDelete = async (id: number) => {
-		await deletePermission(id);
-		setPermissions(permissions.filter((p) => p.id != id));
+		await deleteRole(id);
+		setRoles(roles.filter((p) => p.id != id));
 	};
 
 	if (loading) return <p>Loading ...</p>;
-	if (error) return <p>Failed to load permissions</p>;
+	if (error) return <p>Failed to load roles</p>;
 
 	return (
 		<div style={{ padding: '16px', position: 'relative' }}>
-			<h1>Permissions</h1>
+			<h1>Roles</h1>
 			<div className='side-btn'>
 				<TextField
 					className='search-box-wrapper'
@@ -62,18 +62,18 @@ export default function PermissionPage() {
 						setFormOpen(true);
 					}}
 				>
-					+ Create Permission
+					+ Create Role
 				</Button>
 			</div>
-			<PermissionTable
-				permissions={permissions}
+			<RoleTable
+				roles={roles}
 				onEdit={(perm) => {
 					setEditData(perm);
 					setFormOpen(true);
 				}}
 				onDelete={handleDelete}
 			/>
-			<PermissionForm
+			<RoleForm
 				open={formOpen}
 				onClose={() => setFormOpen(false)}
 				onSubmit={(data) => (editData ? handleUpdate({ ...editData, ...data }) : handleCreate(data))}

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { forEach, values } from 'lodash-es';
+import { BaseQuery } from './commonService';
 
 const API_URL = `${import.meta.env.VITE_APP_URL}/permissions`;
 
@@ -9,12 +9,7 @@ export interface Permission {
 	description: string;
 }
 
-export interface PermissionQuery {
-	page?: number;
-	limit?: number;
-	search?: string;
-	sortBy?: string;
-	sortOrder?: 'asc' | 'desc';
+export interface PermissionQuery extends BaseQuery {
 }
 
 export const fetchData = async (query: PermissionQuery = {}) => {

@@ -12,11 +12,9 @@ export function usePermissions(query: PermissionQuery = {}) {
 		setLoading(true);
 		fetchData(query)
 			.then((res) => {
-				var data = [];
 				const mock_data = res.result;
-				if (typeof mock_data.content !== undefined && mock_data.content.length > 0) data = mock_data.content;
 
-				setPermissions(data);
+				setPermissions(mock_data.content || []);
 				setTotal(mock_data.totalElements || 0);
 				setTotalPages(mock_data.totalPages || 1);
 			})

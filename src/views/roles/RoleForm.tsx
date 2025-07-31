@@ -1,17 +1,17 @@
 import { TextField } from '@mui/material';
-import { Permission } from 'api/permissionService';
+import { Role } from 'api/roleService';
 import CommonDialog from 'components/Dialog/GenericDialog';
 import { useEffect, useState } from 'react';
 
-interface PermissionFormProps {
+interface RoleFormProps {
 	open: boolean;
 	onClose: () => void;
-	onSubmit: (data: Partial<Permission>) => void;
-	initialData?: Permission | null;
+	onSubmit: (data: Partial<Role>) => void;
+	initialData?: Role | null;
 }
 
-export default function PermissionForm({ open, onClose, onSubmit, initialData }: PermissionFormProps) {
-	const [form, setForm] = useState<Partial<Permission>>({ name: '', description: '' });
+export default function RoleForm({ open, onClose, onSubmit, initialData }: RoleFormProps) {
+	const [form, setForm] = useState<Partial<Role>>({ name: '', description: '' });
 
 	useEffect(() => {
 		if (initialData) setForm(initialData);
@@ -26,7 +26,7 @@ export default function PermissionForm({ open, onClose, onSubmit, initialData }:
 	return (
 		<CommonDialog
 			open={open}
-			title={initialData ? 'Edit Permission' : 'Create Permission'}
+			title={initialData ? 'Edit Role' : 'Create Role'}
 			onClose={onClose}
 			actions={[
 				{
