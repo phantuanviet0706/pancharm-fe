@@ -6,6 +6,7 @@ export interface Column<T> {
 	align?: 'left' | 'right' | 'center';
 	headerStyle?: React.CSSProperties;
 	cellStyle?: React.CSSProperties;
+	className?: string;
 }
 
 interface GenericTableProps<T> {
@@ -67,8 +68,9 @@ export default function GenericTable<T>({ data, columns, rowKey, maxHeight = 400
 											textAlign: col.align || 'left',
 											width: col.width || 'auto'
 										}}
+										className={col.className}
 									>
-										{col.render ? col.render(row) : (row[col.key as keyof T] as any)}
+										{col.render ? col.render(row) : (<span title={row[col.key as keyof T] as any}>{row[col.key as keyof T] as any}</span>)}
 									</td>
 								))}
 							</tr>

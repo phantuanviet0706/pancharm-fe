@@ -20,7 +20,7 @@ export default function PermissionTable({ permissions, onEdit, onDelete }: Permi
 			columns={[
 				{ key: 'id', label: 'ID', width: '10vw' },
 				{ key: 'name', label: 'Name' },
-				{ key: 'description', label: 'Description' },
+				{ key: 'description', label: 'Description', className: 'text-limit' },
 				{
 					key: 'actions',
 					label: 'Actions',
@@ -31,7 +31,7 @@ export default function PermissionTable({ permissions, onEdit, onDelete }: Permi
 						<ActionMenu
 							actions={[
 								{ label: 'Edit', onClick: () => onEdit(row) },
-								{ label: 'Delete', onClick: () => onDelete(row) }
+								{ label: 'Delete', onClick: () => onDelete(row.id), color: 'red' }
 							]}
 						/>
 					)
