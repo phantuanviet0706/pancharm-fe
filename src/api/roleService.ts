@@ -8,7 +8,7 @@ export interface Role {
     id: number,
     name: string,
     description: string
-    permissions: Permission[]
+    permissions: String[]
 }
 
 export interface RoleQuery extends BaseQuery{

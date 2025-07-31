@@ -16,21 +16,48 @@ export default function PermissionPage() {
 	const [editData, setEditData] = useState<Permission | null>(null);
 
 	const handleCreate = async (data: Partial<Permission>) => {
-		const res = await createPermission(data as Omit<Permission, 'id'>);
-		const mock_result = res && res.result ? res.result : null;
-		setPermissions([...permissions, mock_result]);
+		try {
+			const res = await createPermission(data as Omit<Permission, 'id'>);
+			if (res?.code === 1 && res?.result) {
+				setPermissions([...permissions, res.result]);
+			}
+			return { code: res?.code, message: res?.message };
+		} catch (err: any) {
+			return {
+				code: -1,
+				message: err?.response?.data?.message || err.message || 'Create failed'
+			};
+		}
 	};
 
 	const handleUpdate = async (data: Partial<Permission>) => {
-		if (!data.id) return;
-		const res = await updatePermission(data.id, data);
-		const mock_result = res && res.result ? res.result : null;
-		setPermissions(permissions.map((p) => (p.id === mock_result.id ? mock_result : p)));
+		if (!data.id) return { code: -1, message: 'Missing ID for update' };
+		try {
+			const res = await updatePermission(data.id, data);
+			if (res?.code === 1 && res?.result) {
+				setPermissions(permissions.map((p) => (p.id === res.result.id ? res.result : p)));
+			}
+		} catch (err: any) {
+			return {
+				code: -1,
+				message: err?.response?.data?.message || err.message || 'Update failed'
+			};
+		}
 	};
 
 	const handleDelete = async (id: number) => {
-		await deletePermission(id);
-		setPermissions(permissions.filter((p) => p.id != id));
+		try {
+			const res = await deletePermission(id);
+			if (res?.code === 1) {
+				setPermissions(permissions.filter((p) => p.id != id));
+			}
+			return { code: res?.code, message: res?.message };
+		} catch (err: any) {
+			return {
+				code: -1,
+				message: err?.response?.data?.message || err.message || 'Delete failed'
+			};
+		}
 	};
 
 	if (loading) return <p>Loading ...</p>;
@@ -39,16 +66,16 @@ export default function PermissionPage() {
 	return (
 		<div style={{ padding: '16px', position: 'relative' }}>
 			<h1>Permissions</h1>
-			<div className='side-btn'>
+			<div className="side-btn">
 				<TextField
-					className='search-box-wrapper'
+					className="search-box-wrapper"
 					label="Search"
 					variant="outlined"
 					size="small"
 					fullWidth
 					onKeyDown={(e) => {
 						if (e.key === 'Enter') {
-							console.log((e.target as HTMLInputElement).value)
+							console.log((e.target as HTMLInputElement).value);
 							setSearchText((e.target as HTMLInputElement).value);
 							setPage(0);
 						}
