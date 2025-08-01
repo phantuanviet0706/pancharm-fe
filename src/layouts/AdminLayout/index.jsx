@@ -42,19 +42,13 @@ export default function AdminLayout() {
 				<div className="pcoded-content">
 					<>
 						<Breadcrumb />
-						<Suspense fallback={<Loader />}>
-							<Outlet />
-						</Suspense>
+						<div className="page-content">
+							<Suspense fallback={<Loader />}>
+								<Outlet />
+							</Suspense>
+						</div>
 					</>
 				</div>
-				{/* <a
-					href="https://codedthemes.com/item/dashboardkit-react-admin-template/"
-					target="_blank"
-					className="btn btn-primary position-fixed bottom-0 end-0 mb-5 me-3 z-1"
-					rel="noreferrer"
-				>
-					Buy Now
-				</a> */}
 			</div>
 		</>
 	);

@@ -1,40 +1,28 @@
 import { Alert, Snackbar, TextField } from '@mui/material';
 import { Permission } from 'api/permissionService';
 import CommonDialog from 'components/Dialog/GenericDialog';
+import { useFormHandler } from 'hooks/useFormHandler';
 import { useEffect, useState } from 'react';
 
 interface PermissionFormProps {
 	open: boolean;
 	onClose: () => void;
-	onSubmit: (data: Partial<Permission>) => void;
+	onSubmit: (data: Partial<Permission>) => Promise<{ code: number; message?: string }>;
 	initialData?: Permission | null;
 }
 
 export default function PermissionForm({ open, onClose, onSubmit, initialData }: PermissionFormProps) {
-	const [form, setForm] = useState<Partial<Permission>>({ name: '', description: '' });
-	const [errorMessage, setErrorMessage] = useState<string | null>(null);
-	const [successMessage, setSuccessMessage] = useState<string | null>(null);
+	const { form, setForm, errorMessage, setErrorMessage, successMessage, setSuccessMessage, handleSubmit } = useFormHandler<Permission>(
+		initialData ?? null,
+		{ name: '', description: '' },
+		onSubmit,
+		open
+	);
 
 	useEffect(() => {
 		if (initialData) setForm(initialData);
 		else setForm({ name: '', description: '' });
 	}, [initialData]);
-
-	const handleSubmit = async () => {
-		try {
-			const res = await Promise.resolve(onSubmit(form));
-			if (res?.code !== 1) {
-				setErrorMessage(res?.message || 'Something went wrong');
-				return;
-			}
-
-			setSuccessMessage(res?.message || 'Action successful');
-			onClose();
-		} catch (error: any) {
-			const message = error?.response?.data?.message || error?.message || 'Something went wrong';
-			setErrorMessage(message);
-		}
-	};
 
 	return (
 		<>

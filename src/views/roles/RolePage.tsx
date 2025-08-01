@@ -65,7 +65,7 @@ export default function RolePage() {
 	if (error) return <p>Failed to load roles</p>;
 
 	return (
-		<div style={{ padding: '16px', position: 'relative' }}>
+		<div style={{ position: 'relative' }}>
 			<h1>Roles</h1>
 			<div className="side-btn">
 				<TextField

@@ -2,22 +2,31 @@ import { Alert, Autocomplete, Snackbar, TextField } from '@mui/material';
 import { fetchData, Permission, PermissionQuery } from 'api/permissionService';
 import { Role } from 'api/roleService';
 import CommonDialog from 'components/Dialog/GenericDialog';
+import { useFormHandler } from 'hooks/useFormHandler';
 import { useEffect, useState } from 'react';
 
 interface RoleFormProps {
 	open: boolean;
 	onClose: () => void;
-	onSubmit: (data: Partial<Role>) => Promise<{ code: number; message?: string } | undefined>;
+	onSubmit: (data: Partial<Role>) => Promise<{ code: number; message?: string }>;
 	initialData?: Role | null;
 }
 
 export default function RoleForm({ open, onClose, onSubmit, initialData }: RoleFormProps) {
-	const [form, setForm] = useState<Partial<Role>>({ name: '', description: '', permissions: [] });
+	const { form, setForm, errorMessage, setErrorMessage, successMessage, setSuccessMessage, handleSubmit } = useFormHandler<Role>(
+		initialData ?? null,
+		{ name: '', description: '' },
+		onSubmit,
+		open,
+		(form: Partial<Role>) => ({
+			...form,
+			permissions: (form.permissions || []).map((p: any) => p.name)
+		})
+	);
+	
 	const [permissionOptions, setPermissionOptions] = useState<Permission[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [autocompleteOpen, setAutocompleteOpen] = useState(false);
-	const [errorMessage, setErrorMessage] = useState<string | null>(null);
-	const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
 	const handlePermissionSearch = async (query: PermissionQuery) => {
 		try {
@@ -39,28 +48,6 @@ export default function RoleForm({ open, onClose, onSubmit, initialData }: RoleF
 		} else setForm({ name: '', description: '', permissions: [] });
 	}, [initialData]);
 
-	const handleSubmit = async () => {
-		try {
-			const formToSubmit = {
-				...form,
-				permissions: (form.permissions || []).map((p: any) => p.name)
-			};
-
-			const res = await Promise.resolve(onSubmit(formToSubmit));
-
-			if (res?.code !== 1) {
-				setErrorMessage(res?.message || 'Something went wrong');
-				return;
-			}
-
-			setSuccessMessage(res?.message || 'Action successful');
-			onClose();
-		} catch (error: any) {
-			const message = error?.response?.data?.message || error?.message || 'Something went wrong';
-			setErrorMessage(message);
-		}
-	};
-
 	return (
 		<>
 			<CommonDialog
@@ -79,7 +66,7 @@ export default function RoleForm({ open, onClose, onSubmit, initialData }: RoleF
 						label: 'Save',
 						variant: 'contained',
 						color: 'primary',
-						onClick: handleSubmit,
+						onClick: () => handleSubmit(() => onClose()),
 						sx: { width: '50%' }
 					}
 				]}

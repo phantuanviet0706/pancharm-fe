@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // Menu configuration for default layout
 const menuItems = {
 	items: [

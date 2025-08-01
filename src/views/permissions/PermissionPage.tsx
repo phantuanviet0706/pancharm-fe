@@ -64,7 +64,7 @@ export default function PermissionPage() {
 	if (error) return <p>Failed to load permissions</p>;
 
 	return (
-		<div style={{ padding: '16px', position: 'relative' }}>
+		<div style={{ position: 'relative' }}>
 			<h1>Permissions</h1>
 			<div className="side-btn">
 				<TextField

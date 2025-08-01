@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // Menu configuration for default layout
 const menuItems = {
 	items: [
@@ -174,6 +175,31 @@ const menuItems = {
 					classes: 'nav-item disabled',
 					icon: 'material-icons-two-tone',
 					iconname: 'power_off'
+				}
+			]
+		},
+		{
+			id: 'authorization',
+			title: 'AUTH',
+			subtitle: 'Manage Authorization',
+			type: 'group',
+			icon: 'icon-auth',
+			children: [
+				{
+					id: 'roles',
+					title: 'Roles',
+					type: 'item',
+					url: '/roles',
+					icon: 'material-icons-two-tone',
+					iconname: 'security'
+				},
+				{
+					id: 'permissions',
+					title: 'Permissions',
+					type: 'item',
+					url: '/permissions',
+					icon: 'material-icons-two-tone',
+					iconname: 'security'
 				}
 			]
 		}
