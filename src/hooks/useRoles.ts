@@ -14,7 +14,12 @@ export function useRoles(query: RoleQuery = {}) {
             .then((res) => {
                 const mock_data = res.result;
 
-                setRoles(mock_data.content || []);
+                setRoles(
+                    (mock_data.content || []).map((role: any) => ({
+                        ...role,
+                        permissions: (role.permissions || []).map((perm: any) => perm.name)
+                    }))
+                );
                 setTotal(mock_data.totalElements || 0);
                 setTotalPages(mock_data.totalPages || 1);
             })

@@ -20,6 +20,7 @@ export default function GenericTable<T>({ data, columns, rowKey, maxHeight = 400
 	if (!data || data.length == 0) return <p>No data found.</p>;
 
 	const headerStyle = {
+		borderRight: '1px solid #ddd',
 		padding: '12px',
 		textAlign: 'left' as const,
 		backgroundColor: '#f9f9f9',
@@ -28,32 +29,35 @@ export default function GenericTable<T>({ data, columns, rowKey, maxHeight = 400
 	};
 
 	const cellStyle = {
+		borderRight: '1px solid #ddd',
+		borderBottom: '1px solid #ddd',
 		padding: '12px',
-		borderBottom: '1px solid #eee',
 		backgroundColor: '#eee'
 	};
 
 	return (
 		<div style={{ border: '1px solid #ddd', borderRadius: 6, marginTop: 20 }}>
-			<table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
-				<thead>
-					<tr>
-						{columns.map((col, idx) => (
-							<th
-								key={idx}
-								style={{
-									...headerStyle,
-                                    ...col.headerStyle,
-									width: col.width || 'auto',
-									textAlign: col.align || 'left'
-								}}
-							>
-								{col.label}
-							</th>
-						))}
-					</tr>
-				</thead>
-			</table>
+			<div style={{ overflowY: 'scroll' }}>
+				<table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+					<thead>
+						<tr>
+							{columns.map((col, idx) => (
+								<th
+									key={idx}
+									style={{
+										...headerStyle,
+										...col.headerStyle,
+										width: col.width || 'auto',
+										textAlign: col.align || 'left'
+									}}
+								>
+									{col.label}
+								</th>
+							))}
+						</tr>
+					</thead>
+				</table>
+			</div>
 			<div style={{ maxHeight, overflowY: 'auto' }}>
 				<table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
 					<tbody>
