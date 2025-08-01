@@ -9,6 +9,8 @@ WORKDIR /app
 
 COPY package.json yarn.lock .yarnrc.yml ./
 
+COPY .yarn .yarn
+
 RUN yarn install
 
 COPY . .
