@@ -18,4 +18,4 @@ RUN yarn install
 # RUN yarn build
 
 # Default command
-CMD ["yarn", "start"]
+CMD ["yarn", "preview", "--host", "--port", "3000"]
