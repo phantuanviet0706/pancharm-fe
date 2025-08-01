@@ -5,3 +5,5 @@ Dockerfile
 .vscode
 .git
 .env*
+!.yarn
+!.yarn/**
