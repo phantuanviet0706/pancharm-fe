@@ -1,28 +1,38 @@
-# Base image with Node.js 18
+# -----------------------
+# Stage 1: Build
+# -----------------------
 FROM node:18-slim AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Enable corepack and activate Yarn 4.6.0
+# Enable corepack and install Yarn 4.6.0
+RUN corepack enable && corepack prepare yarn@4.6.0 --activate
+
+# Copy dependencies
 COPY package.json yarn.lock ./
-RUN corepack enable \
-  && corepack prepare yarn@4.6.0 --activate
 RUN yarn install
 
-# Copy project files
+# Copy full source code
 COPY . .
+
+# Build Vite app
 RUN yarn build
 
+
+# -----------------------
+# Stage 2: Run preview server
+# -----------------------
 FROM node:18-slim
 
 WORKDIR /app
 
-COPY --from=builder /app /app
-
 RUN corepack enable && corepack prepare yarn@4.6.0 --activate
 
+# Copy built app from builder
+COPY --from=builder /app /app
+
+# Expose port (change if needed)
 EXPOSE 3000
 
-# Default command
+# Run Vite preview on host mode so EC2/IP can reach
 CMD ["yarn", "preview", "--host", "--port", "3000"]
