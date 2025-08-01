@@ -35,7 +35,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: phantuanviet0706/pancharm-fe:latest
+          tags: phantuanviet0706/pancharm-fe:0.9.0
 
       - name: Move cache for next build
         run: |
