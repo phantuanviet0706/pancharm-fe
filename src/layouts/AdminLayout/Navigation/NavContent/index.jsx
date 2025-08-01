@@ -46,6 +46,15 @@ export default function NavContent({ navigation, activeNav }) {
 			<ListGroup variant="flush" as="ul" bsPrefix=" " className="pc-navbar">
 				{navItems}
 			</ListGroup>
+			<Card className="nav-action-card m-3">
+				<Card.Body>
+					<h5 className="text-white">Need Help?</h5>
+					<p className="text-white text-opacity-75">If you're facing issues, reach out to us.</p>
+					<a href="https://facebook.com/phan.tsuki.1" target="_blank" className="btn btn-primary">
+						Contact Support
+					</a>
+				</Card.Body>
+			</Card>
 		</SimpleBar>
 	);
 

@@ -191,7 +191,7 @@ const menuItems = {
 					type: 'item',
 					url: '/roles',
 					icon: 'material-icons-two-tone',
-					iconname: 'security'
+					iconname: 'admin_panel_settings'
 				},
 				{
 					id: 'permissions',
@@ -199,7 +199,7 @@ const menuItems = {
 					type: 'item',
 					url: '/permissions',
 					icon: 'material-icons-two-tone',
-					iconname: 'security'
+					iconname: 'vpn_key'
 				}
 			]
 		}
