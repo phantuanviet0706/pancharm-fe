@@ -44,11 +44,26 @@ export default function RoleForm({ open, onClose, onSubmit, initialData, onSucce
 	};
 
 	useEffect(() => {
-		if (initialData) {
-			setForm(initialData);
-		} else {
-			setForm(DEFAULT_ROLE);
-		}
+		const initializeForm = async () => {
+			if (initialData) {
+				if (initialData?.permissions && initialData.permissions.length) {
+					try {
+						const res = await fetchData({ keyword: initialData.permissions as string[] });
+						const permissions = res?.result?.content || [];
+						setForm({ ...initialData, permissions: permissions });
+					} catch (err) {
+						console.error('Failed to load permissions for edit form:', err);
+						setForm({ ...initialData, permissions: [] });
+					}
+				} else {
+					setForm(initialData);
+				}
+			} else {
+				setForm(DEFAULT_ROLE);
+			}
+		};
+
+		initializeForm();
 	}, [initialData]);
 
 	return (

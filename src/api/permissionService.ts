@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { BaseQuery } from './commonService';
+import { unescape } from 'querystring';
 
 const API_URL = `${import.meta.env.VITE_APP_URL}/permissions`;
 

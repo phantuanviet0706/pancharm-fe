@@ -14,6 +14,7 @@ export function useRoles(query: RoleQuery = {}) {
 			.then((res) => {
 				const mock_data = res.result;
 
+				setRoles(mock_data.content || []);
 				setRoles(
 					(mock_data.content || []).map((role: any) => ({
 						...role,
