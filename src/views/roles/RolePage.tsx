@@ -4,6 +4,7 @@ import RoleTable from './RoleTable';
 import RoleForm from './RoleForm';
 import { useRoles } from 'hooks/useRoles';
 import { createRole, deleteRole, Role, updateRole } from 'api/roleService';
+import GenericSnackbar from 'components/Snackbar/GenericSnackbar';
 
 export default function RolePage() {
 	const [page, setPage] = useState(0);
@@ -14,6 +15,14 @@ export default function RolePage() {
 	const { roles, loading, error, setRoles, total, totalPages } = useRoles(query);
 	const [formOpen, setFormOpen] = useState(false);
 	const [editData, setEditData] = useState<Role | null>(null);
+
+	const [snackbarCode, setSnackbarCode] = useState<number>(0);
+	const [snackbarMessage, setSnackbarMessage] = useState<string>('');
+
+	const handleFormSuccess = (code: number, message: string) => {
+		setSnackbarCode(code);
+		setSnackbarMessage(message);
+	};
 
 	const handleCreate = async (data: Partial<Role>) => {
 		try {
@@ -76,7 +85,6 @@ export default function RolePage() {
 					fullWidth
 					onKeyDown={(e) => {
 						if (e.key === 'Enter') {
-							console.log((e.target as HTMLInputElement).value);
 							setSearchText((e.target as HTMLInputElement).value);
 							setPage(0);
 						}
@@ -106,10 +114,20 @@ export default function RolePage() {
 				onClose={() => setFormOpen(false)}
 				onSubmit={(data) => (editData ? handleUpdate({ ...editData, ...data }) : handleCreate(data))}
 				initialData={editData}
+				onSuccess={handleFormSuccess}
 			/>
 			<div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
 				<Pagination count={totalPages} page={page + 1} onChange={(e, value) => setPage(value - 1)} color="primary" />
 			</div>
+
+			<GenericSnackbar
+				code={snackbarCode}
+				message={snackbarMessage}
+				onClose={() => {
+					setSnackbarCode(0);
+					setSnackbarMessage('');
+				}}
+			/>
 		</div>
 	);
 }

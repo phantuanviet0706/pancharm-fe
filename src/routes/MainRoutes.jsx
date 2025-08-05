@@ -19,6 +19,7 @@ const Sample = lazy(() => import('../views/sample'));
 
 const PermissionPage = lazy(() => import('../views/permissions/PermissionPage'));
 const RolePage = lazy(() => import('../views/roles/RolePage'));
+const CategoryPage = lazy(() => import('../views/categories/CategoryPage'));
 
 const MainRoutes = {
 	path: '/',
@@ -56,7 +57,7 @@ const MainRoutes = {
 					path: '/sample-page',
 					element: <Sample />
 				},
-				
+
 				{
 					path: '/permissions',
 					element: <PermissionPage />
@@ -65,6 +66,11 @@ const MainRoutes = {
 				{
 					path: '/roles',
 					element: <RolePage />
+				},
+
+				{
+					path: '/categories',
+					element: <CategoryPage />
 				}
 			]
 		},

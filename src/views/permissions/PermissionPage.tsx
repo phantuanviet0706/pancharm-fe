@@ -4,6 +4,7 @@ import { createPermission, updatePermission, deletePermission, Permission } from
 import { Button, Pagination, TextField } from '@mui/material';
 import PermissionTable from './PermissionTable';
 import PermissionForm from './PermissionForm';
+import GenericSnackbar from 'components/Snackbar/GenericSnackbar';
 
 export default function PermissionPage() {
 	const [page, setPage] = useState(0);
@@ -14,6 +15,14 @@ export default function PermissionPage() {
 	const { permissions, loading, error, setPermissions, total, totalPages } = usePermissions(query);
 	const [formOpen, setFormOpen] = useState(false);
 	const [editData, setEditData] = useState<Permission | null>(null);
+
+	const [snackbarCode, setSnackbarCode] = useState<number>(0);
+	const [snackbarMessage, setSnackbarMessage] = useState<string>('');
+
+	const handleFormSuccess = (code: number, message: string) => {
+		setSnackbarCode(code);
+		setSnackbarMessage(message);
+	};
 
 	const handleCreate = async (data: Partial<Permission>) => {
 		try {
@@ -37,6 +46,7 @@ export default function PermissionPage() {
 			if (res?.code === 1 && res?.result) {
 				setPermissions(permissions.map((p) => (p.id === res.result.id ? res.result : p)));
 			}
+			return { code: res?.code, message: res?.message };
 		} catch (err: any) {
 			return {
 				code: -1,
@@ -105,10 +115,20 @@ export default function PermissionPage() {
 				onClose={() => setFormOpen(false)}
 				onSubmit={(data) => (editData ? handleUpdate({ ...editData, ...data }) : handleCreate(data))}
 				initialData={editData}
+				onSuccess={handleFormSuccess}
 			/>
 			<div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
 				<Pagination count={totalPages} page={page + 1} onChange={(e, value) => setPage(value - 1)} color="primary" />
 			</div>
+
+			<GenericSnackbar
+				code={snackbarCode}
+				message={snackbarMessage}
+				onClose={() => {
+					setSnackbarCode(0);
+					setSnackbarMessage('');
+				}}
+			/>
 		</div>
 	);
 }

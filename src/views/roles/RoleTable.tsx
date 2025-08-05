@@ -17,7 +17,7 @@ export default function RoleTable({ roles, onEdit, onDelete }: RoleTableProps) {
 	return (
 		<GenericTable
 			data={roles}
-			rowKey={(row) => row.id}
+			rowKey={(row) => (row?.id ? row.id : 0)}
 			columns={[
 				{ key: 'id', label: 'ID', width: '10vw' },
 				{ key: 'name', label: 'Name' },
@@ -43,7 +43,7 @@ export default function RoleTable({ roles, onEdit, onDelete }: RoleTableProps) {
 						<ActionMenu
 							actions={[
 								{ label: 'Edit', onClick: () => onEdit(row) },
-								{ label: 'Delete', onClick: () => onDelete(row.id), color: 'red' }
+								{ label: 'Delete', onClick: () => onDelete(row?.id ? row.id : 0), color: 'red' }
 							]}
 						/>
 					)

@@ -7,6 +7,7 @@ export interface Column<T> {
 	headerStyle?: React.CSSProperties;
 	cellStyle?: React.CSSProperties;
 	className?: string;
+	onClick?: (row: T) => void;
 }
 
 interface GenericTableProps<T> {
@@ -58,7 +59,7 @@ export default function GenericTable<T>({ data, columns, rowKey, maxHeight = 400
 					</thead>
 				</table>
 			</div>
-			<div style={{ maxHeight, overflowY: 'auto' }}>
+			<div style={{ maxHeight, overflowY: 'scroll' }}>
 				<table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
 					<tbody>
 						{data.map((row) => (
@@ -73,6 +74,7 @@ export default function GenericTable<T>({ data, columns, rowKey, maxHeight = 400
 											width: col.width || 'auto'
 										}}
 										className={col.className}
+										onClick={() => col.onClick?.(row)}
 									>
 										{col.render ? col.render(row) : (<span title={row[col.key as keyof T] as any}>{row[col.key as keyof T] as any}</span>)}
 									</td>

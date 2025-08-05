@@ -1,6 +1,6 @@
 import { Alert, Autocomplete, Snackbar, TextField } from '@mui/material';
 import { fetchData, Permission, PermissionQuery } from 'api/permissionService';
-import { Role } from 'api/roleService';
+import { DEFAULT_ROLE, Role } from 'api/roleService';
 import CommonDialog from 'components/Dialog/GenericDialog';
 import { useFormHandler } from 'hooks/useFormHandler';
 import { useEffect, useState } from 'react';
@@ -10,12 +10,13 @@ interface RoleFormProps {
 	onClose: () => void;
 	onSubmit: (data: Partial<Role>) => Promise<{ code: number; message?: string }>;
 	initialData?: Role | null;
+	onSuccess?: (code: number, message: string) => void;
 }
 
-export default function RoleForm({ open, onClose, onSubmit, initialData }: RoleFormProps) {
-	const { form, setForm, errorMessage, setErrorMessage, successMessage, setSuccessMessage, handleSubmit } = useFormHandler<Role>(
+export default function RoleForm({ open, onClose, onSubmit, initialData, onSuccess }: RoleFormProps) {
+	const { form, setForm, handleSubmit } = useFormHandler<Role>(
 		initialData ?? null,
-		{ name: '', description: '' },
+		DEFAULT_ROLE,
 		onSubmit,
 		open,
 		(form: Partial<Role>) => ({
@@ -23,7 +24,7 @@ export default function RoleForm({ open, onClose, onSubmit, initialData }: RoleF
 			permissions: (form.permissions || []).map((p: any) => p.name)
 		})
 	);
-	
+
 	const [permissionOptions, setPermissionOptions] = useState<Permission[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [autocompleteOpen, setAutocompleteOpen] = useState(false);
@@ -45,7 +46,9 @@ export default function RoleForm({ open, onClose, onSubmit, initialData }: RoleF
 	useEffect(() => {
 		if (initialData) {
 			setForm(initialData);
-		} else setForm({ name: '', description: '', permissions: [] });
+		} else {
+			setForm(DEFAULT_ROLE);
+		}
 	}, [initialData]);
 
 	return (
@@ -66,7 +69,11 @@ export default function RoleForm({ open, onClose, onSubmit, initialData }: RoleF
 						label: 'Save',
 						variant: 'contained',
 						color: 'primary',
-						onClick: () => handleSubmit(() => onClose()),
+						onClick: () =>
+							handleSubmit((res) => {
+								onSuccess?.(res.code, res.message);
+								if (res.code === 1) onClose();
+							}),
 						sx: { width: '50%' }
 					}
 				]}
@@ -122,28 +129,6 @@ export default function RoleForm({ open, onClose, onSubmit, initialData }: RoleF
 					)}
 				/>
 			</CommonDialog>
-
-			<Snackbar
-				open={!!errorMessage}
-				autoHideDuration={4000}
-				onClose={() => setErrorMessage(null)}
-				anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-			>
-				<Alert onClose={() => setErrorMessage(null)} severity="error" variant="filled" sx={{ width: '100%' }}>
-					{errorMessage}
-				</Alert>
-			</Snackbar>
-
-			<Snackbar
-				open={!!successMessage}
-				autoHideDuration={3000}
-				onClose={() => setSuccessMessage(null)}
-				anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-			>
-				<Alert onClose={() => setSuccessMessage(null)} severity="success" variant="filled" sx={{ width: '100%' }}>
-					{successMessage}
-				</Alert>
-			</Snackbar>
 		</>
 	);
 }

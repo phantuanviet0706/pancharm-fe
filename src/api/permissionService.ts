@@ -4,13 +4,14 @@ import { BaseQuery } from './commonService';
 const API_URL = `${import.meta.env.VITE_APP_URL}/permissions`;
 
 export interface Permission {
-	id: number;
+	id?: number;
 	name: string;
 	description: string;
 }
 
-export interface PermissionQuery extends BaseQuery {
-}
+export interface PermissionQuery extends BaseQuery {}
+
+export const DEFAULT_PERMISSION: Permission = { id: 0, name: '', description: '' };
 
 export const fetchData = async (query: PermissionQuery = {}) => {
 	const params = new URLSearchParams();

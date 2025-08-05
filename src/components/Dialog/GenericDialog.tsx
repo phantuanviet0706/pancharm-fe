@@ -1,8 +1,8 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 interface DialogAction {
 	label: string;
-	onClose: () => void;
+	onClick: () => void;
 	variant?: 'text' | 'outlined' | 'contained';
 	color?: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning';
 	disabled?: boolean;
@@ -34,7 +34,7 @@ export default function CommonDialog({ open, title, children, actions = [], onCl
 							onClick={action.onClick}
 							disabled={action.disabled}
 							sx={action.sx}
-						>	
+						>
 							{action.label}
 						</Button>
 					))}

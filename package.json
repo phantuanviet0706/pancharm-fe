@@ -2,6 +2,9 @@
 	"name": "dashboard-kit-react",
 	"version": "3.0.0",
 	"private": true,
+	"workspaces": [
+		"packages/*"
+	],
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
 		"@emotion/styled": "^11.14.1",

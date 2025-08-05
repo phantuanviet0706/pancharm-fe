@@ -1,5 +1,5 @@
 import { Alert, Snackbar, TextField } from '@mui/material';
-import { Permission } from 'api/permissionService';
+import { DEFAULT_PERMISSION, Permission } from 'api/permissionService';
 import CommonDialog from 'components/Dialog/GenericDialog';
 import { useFormHandler } from 'hooks/useFormHandler';
 import { useEffect, useState } from 'react';
@@ -9,19 +9,15 @@ interface PermissionFormProps {
 	onClose: () => void;
 	onSubmit: (data: Partial<Permission>) => Promise<{ code: number; message?: string }>;
 	initialData?: Permission | null;
+	onSuccess?: (code: number, message: string) => void;
 }
 
-export default function PermissionForm({ open, onClose, onSubmit, initialData }: PermissionFormProps) {
-	const { form, setForm, errorMessage, setErrorMessage, successMessage, setSuccessMessage, handleSubmit } = useFormHandler<Permission>(
-		initialData ?? null,
-		{ name: '', description: '' },
-		onSubmit,
-		open
-	);
+export default function PermissionForm({ open, onClose, onSubmit, initialData, onSuccess }: PermissionFormProps) {
+	const { form, setForm, handleSubmit } = useFormHandler<Permission>(initialData ?? null, DEFAULT_PERMISSION, onSubmit, open);
 
 	useEffect(() => {
 		if (initialData) setForm(initialData);
-		else setForm({ name: '', description: '' });
+		else setForm(DEFAULT_PERMISSION);
 	}, [initialData]);
 
 	return (
@@ -42,7 +38,11 @@ export default function PermissionForm({ open, onClose, onSubmit, initialData }:
 						label: 'Save',
 						variant: 'contained',
 						color: 'primary',
-						onClick: handleSubmit,
+						onClick: () =>
+							handleSubmit((res) => {
+								onSuccess?.(res.code, res.message || '');
+								if (res.code === 1) onClose();
+							}),
 						sx: { width: '50%' }
 					}
 				]}
@@ -64,27 +64,6 @@ export default function PermissionForm({ open, onClose, onSubmit, initialData }:
 					onChange={(e) => setForm({ ...form, description: e.target.value })}
 				/>
 			</CommonDialog>
-			<Snackbar
-				open={!!errorMessage}
-				autoHideDuration={4000}
-				onClose={() => setErrorMessage(null)}
-				anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-			>
-				<Alert onClose={() => setErrorMessage(null)} severity="error" variant="filled" sx={{ width: '100%' }}>
-					{errorMessage}
-				</Alert>
-			</Snackbar>
-
-			<Snackbar
-				open={!!successMessage}
-				autoHideDuration={3000}
-				onClose={() => setSuccessMessage(null)}
-				anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-			>
-				<Alert onClose={() => setSuccessMessage(null)} severity="success" variant="filled" sx={{ width: '100%' }}>
-					{successMessage}
-				</Alert>
-			</Snackbar>
 		</>
 	);
 }
