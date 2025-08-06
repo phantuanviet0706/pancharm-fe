@@ -28,7 +28,9 @@ export default function RolePage() {
 		try {
 			const res = await createRole(data as Omit<Role, 'id'>);
 			if (res?.code === 1 && res?.result) {
-				setRoles([...roles, res.result]);
+				var result = res.result;
+				result.permissions = (result.permissions || []).map((p: any) => p.name);
+				setRoles([...roles, result]);
 			}
 			return { code: res?.code, message: res?.message };
 		} catch (err: any) {
@@ -44,7 +46,9 @@ export default function RolePage() {
 		try {
 			const res = await updateRole(data, data.id);
 			if (res?.code === 1 && res?.result) {
-				setRoles(roles.map((p) => (p.id === res.result.id ? res.result : p)));
+				var result = res.result;
+				result.permissions = (result.permissions || []).map((p: any) => p.name);
+				setRoles(roles.map((p) => (p.id === result.id ? result : p)));
 			}
 			return { code: res?.code, message: res?.message };
 		} catch (err: any) {

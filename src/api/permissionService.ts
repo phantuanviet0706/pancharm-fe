@@ -10,7 +10,9 @@ export interface Permission {
 	description: string;
 }
 
-export interface PermissionQuery extends BaseQuery {}
+export interface PermissionQuery extends BaseQuery {
+	names?: string[];
+}
 
 export const DEFAULT_PERMISSION: Permission = { id: 0, name: '', description: '' };
 

@@ -48,7 +48,7 @@ export default function RoleForm({ open, onClose, onSubmit, initialData, onSucce
 			if (initialData) {
 				if (initialData?.permissions && initialData.permissions.length) {
 					try {
-						const res = await fetchData({ keyword: initialData.permissions as string[] });
+						const res = await fetchData({ names: initialData.permissions as string[] });
 						const permissions = res?.result?.content || [];
 						setForm({ ...initialData, permissions: permissions });
 					} catch (err) {
