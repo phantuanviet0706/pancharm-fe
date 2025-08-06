@@ -1,5 +1,5 @@
 import { Alert, Autocomplete, Snackbar, TextField } from '@mui/material';
-import { Category, CategoryQuery, fetchData } from 'api/categoryService';
+import { Category, CategoryQuery, DEFAULT_CATEGORY, fetchData } from 'api/categoryService';
 import CommonDialog from 'components/Dialog/GenericDialog';
 import { useFormHandler } from 'hooks/useFormHandler';
 import { useEffect, useState } from 'react';
@@ -9,17 +9,19 @@ interface CategoryFormProps {
 	onClose: () => void;
 	onSubmit: (data: Partial<Category>) => Promise<{ code: number; message: string }>;
 	initialData?: Category | null;
+	onSuccess?: (code: number, message: string) => void;
 }
 
-export default function CategoryForm({ open, onClose, onSubmit, initialData }: CategoryFormProps) {
+export default function CategoryForm({ open, onClose, onSubmit, initialData, onSuccess }: CategoryFormProps) {
 	const { form, setForm, errorMessage, setErrorMessage, successMessage, setSuccessMessage, handleSubmit } = useFormHandler<Category>(
 		initialData ?? null,
-		{ name: '', slug: '', parentCategoryId: 0 },
+		DEFAULT_CATEGORY,
 		onSubmit,
 		open,
 		(form: Partial<Category>) => ({
 			...form,
-			categories: Array.isArray(form.categories) ? form.categories.map((p: any) => p.id) : []
+			parentId: form.parentId,
+			parentName: form.parentName
 		})
 	);
 
@@ -28,6 +30,7 @@ export default function CategoryForm({ open, onClose, onSubmit, initialData }: C
 	const [autocompleteOpen, setAutocompleteOpen] = useState(false);
 
 	const handleCategorySearch = async (query: CategoryQuery) => {
+		query.limit = 0;
 		try {
 			setLoading(true);
 			const res = await fetchData(query);
@@ -44,8 +47,11 @@ export default function CategoryForm({ open, onClose, onSubmit, initialData }: C
 	useEffect(() => {
 		if (initialData) {
 			setForm(initialData);
+			if (initialData.parentId) {
+				handleCategorySearch({});
+			}
 		} else {
-			setForm({ name: '', slug: '', parentCategoryId: 0 });
+			setForm(DEFAULT_CATEGORY);
 		}
 	}, [initialData]);
 
@@ -65,7 +71,11 @@ export default function CategoryForm({ open, onClose, onSubmit, initialData }: C
 					{
 						label: 'Save',
 						variant: 'contained',
-						onClick: () => handleSubmit(() => onClose()),
+						onClick: () =>
+							handleSubmit((res) => {
+								onSuccess?.(res.code, res.message);
+								if (res.code === 1) onClose();
+							}),
 						sx: { width: '50%' }
 					}
 				]}
@@ -97,11 +107,16 @@ export default function CategoryForm({ open, onClose, onSubmit, initialData }: C
 					onClose={() => setAutocompleteOpen(false)}
 					options={categoryOptions || []}
 					getOptionLabel={(option) => option.name}
-					filterSelectedOptions
-					value={form.categories || []}
 					isOptionEqualToValue={(option, value) => option.id === value.id}
+					value={
+						categoryOptions.find((cat) => cat.id === form.parentId) ??
+						(form.parentId && form.parentName ? { id: form.parentId, name: form.parentName } : null)
+					}
 					onChange={(_, newValue) => {
-						setForm({ ...form, categories: newValue });
+						setForm({
+							...form,
+							parentId: newValue?.id
+						});
 					}}
 					onInputChange={(_, value) => handleCategorySearch({ keyword: value })}
 					loading={loading}
@@ -120,27 +135,6 @@ export default function CategoryForm({ open, onClose, onSubmit, initialData }: C
 					)}
 				/>
 			</CommonDialog>
-			<Snackbar
-				open={!!errorMessage}
-				autoHideDuration={4000}
-				onClose={() => setErrorMessage(null)}
-				anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-			>
-				<Alert onClose={() => setErrorMessage(null)} severity="error" variant="filled" sx={{ width: '100%' }}>
-					{errorMessage}
-				</Alert>
-			</Snackbar>
-
-			<Snackbar
-				open={!!successMessage}
-				autoHideDuration={3000}
-				onClose={() => setSuccessMessage(null)}
-				anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-			>
-				<Alert onClose={() => setSuccessMessage(null)} severity="success" variant="filled" sx={{ width: '100%' }}>
-					{successMessage}
-				</Alert>
-			</Snackbar>
 		</>
 	);
 }

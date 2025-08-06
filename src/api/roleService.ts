@@ -53,8 +53,8 @@ export const updateRole = async (payload: Partial<Role>, id: number) => {
 
 export const deleteRole = async (id: number) => {
 	try {
-		await axios.delete<Role>(`${API_URL}/${id}`);
-		return true;
+		const res = await axios.delete<Role>(`${API_URL}/${id}`);
+		return res.data;
 	} catch (error) {
 		console.error('Failed to delete role', error);
 		throw error;

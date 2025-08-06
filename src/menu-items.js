@@ -179,6 +179,38 @@ const menuItems = {
 			]
 		},
 		{
+			id: 'management',
+			title: 'MANAGEMENT',
+			subtitle: 'Product, Category and more',
+			type: 'group',
+			children: [
+				{
+					id: 'categories',
+					title: 'Categories',
+					type: 'item',
+					url: '/categories',
+					icon: 'material-icons-two-tone',
+					iconname: 'category'
+				},
+				{
+					id: 'collections',
+					title: 'Collections',
+					type: 'item',
+					url: '/collections',
+					icon: 'material-icons-two-tone',
+					iconname: 'collections_bookmark'
+				},
+				{
+					id: 'products',
+					title: 'Products',
+					type: 'item',
+					url: '/products',
+					icon: 'material-icons-two-tone',
+					iconname: 'shopping_bag'
+				}
+			]
+		},
+		{
 			id: 'authorization',
 			title: 'AUTH',
 			subtitle: 'Manage Authorization',

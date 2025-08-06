@@ -17,10 +17,11 @@ export default function CategoryTable({ categories, onEdit, onDelete, onDetail }
 	return (
 		<GenericTable
 			data={categories}
-			rowKey={(row) => row.id}
+			rowKey={(row) => (row?.id ? row.id : 0)}
 			columns={[
 				{ key: 'id', label: 'ID', width: '10vw' },
-				{ key: 'name', label: 'Name', onClick: (row) => onDetail(row.id) },
+				{ key: 'name', label: 'Name', onClick: (row) => onDetail(row?.id ? row.id : 0) },
+				{ key: 'slug', label: 'Slug' },
 				{
 					key: 'actions',
 					label: 'Actions',

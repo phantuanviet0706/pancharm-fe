@@ -55,8 +55,8 @@ export const updatePermission = async (id: number, payload: Partial<Permission>)
 
 export const deletePermission = async (id: number) => {
 	try {
-		await axios.delete<Permission>(`${API_URL}/${id}`);
-		return true;
+		const res = await axios.delete<Permission>(`${API_URL}/${id}`);
+		return res.data;
 	} catch (error) {
 		console.error('Failed to delete permission', error);
 		throw error;

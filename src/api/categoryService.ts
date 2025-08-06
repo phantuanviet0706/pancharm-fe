@@ -8,8 +8,8 @@ export interface Category {
 	name: string;
 	slug: string;
 	config?: JSON;
-	parentCategoryId?: number;
-	parentCategoryName?: string;
+	parentId?: number;
+	parentName?: string;
 	categories?: number[];
 }
 
@@ -17,7 +17,7 @@ export interface CategoryQuery extends BaseQuery {
 	parentId?: number;
 }
 
-export const DEFAULT_CATEGORY: Category = { name: '', slug: '', parentCategoryId: 0 };
+export const DEFAULT_CATEGORY: Category = { name: '', slug: '', parentId: 0 };
 
 export const fetchData = async (query: CategoryQuery = {}) => {
 	const params = new URLSearchParams();
@@ -58,8 +58,8 @@ export const updateCategory = async (id: number, payload: Partial<Category>) => 
 
 export const deleteCategory = async (id: number) => {
 	try {
-		await axios.delete<Category>(`${API_URL}/${id}`);
-		return true;
+		const res = await axios.delete<Category>(`${API_URL}/${id}`);
+		return res.data;
 	} catch (error) {
 		console.error('Failed to delete category:', error);
 		throw error;
