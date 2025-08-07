@@ -11,6 +11,9 @@ export interface Category {
 	parentId?: number;
 	parentName?: string;
 	categories?: number[];
+	createdAt?: Date;
+	updatedAt?: Date;
+	createdBy?: number;
 }
 
 export interface CategoryQuery extends BaseQuery {
@@ -31,7 +34,7 @@ export const fetchData = async (query: CategoryQuery = {}) => {
 		const res = await axios.get<{ data: Category[]; total: number }>(`${API_URL}?${params.toString()}`);
 		return res.data;
 	} catch (error) {
-		console.error('Failed to fetch category:', error);
+		console.error('Failed to fetch categories:', error);
 		throw error;
 	}
 };
