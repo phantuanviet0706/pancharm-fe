@@ -12,7 +12,7 @@ const FeatherIcon = lazy(() => import('../views/ui-elements/icons/Feather'));
 const FontAwesome = lazy(() => import('../views/ui-elements/icons/FontAwesome'));
 const MaterialIcon = lazy(() => import('../views/ui-elements/icons/Material'));
 
-const Login = lazy(() => import('../views/auth/login'));
+const Login = lazy(() => import('../views/auth/Login'));
 const Register = lazy(() => import('../views/auth/register'));
 
 const Sample = lazy(() => import('../views/sample'));
@@ -20,6 +20,7 @@ const Sample = lazy(() => import('../views/sample'));
 const PermissionPage = lazy(() => import('../views/permissions/PermissionPage'));
 const RolePage = lazy(() => import('../views/roles/RolePage'));
 const CategoryPage = lazy(() => import('../views/categories/CategoryPage'));
+const ProductPage = lazy(() => import('../views/products/ProductPage'));
 
 const MainRoutes = {
 	path: '/',
@@ -71,6 +72,11 @@ const MainRoutes = {
 				{
 					path: '/categories',
 					element: <CategoryPage />
+				},
+
+				{
+					path: '/products',
+					element: <ProductPage />
 				}
 			]
 		},

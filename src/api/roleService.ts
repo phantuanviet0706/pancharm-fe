@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { BaseQuery } from './commonService';
+import axiosClient from './axiosClient';
 
 const API_URL = `${import.meta.env.VITE_APP_URL}/roles`;
 
@@ -23,7 +23,7 @@ export const fetchData = async (query: RoleQuery = {}) => {
 	});
 
 	try {
-		const res = await axios.get<{ data: Role[]; total: number }>(`${API_URL}?${params.toString()}`);
+		const res = await axiosClient.get<{ data: Role[]; total: number }>(`${API_URL}?${params.toString()}`);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to fetch roles:', error);
@@ -33,7 +33,7 @@ export const fetchData = async (query: RoleQuery = {}) => {
 
 export const createRole = async (payload: Omit<Role, 'id'>) => {
 	try {
-		const res = await axios.post<Role>(API_URL, payload);
+		const res = await axiosClient.post<Role>(API_URL, payload);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to create role:', error);
@@ -43,7 +43,7 @@ export const createRole = async (payload: Omit<Role, 'id'>) => {
 
 export const updateRole = async (payload: Partial<Role>, id: number) => {
 	try {
-		const res = await axios.put<Role>(`${API_URL}/${id}`, payload);
+		const res = await axiosClient.put<Role>(`${API_URL}/${id}`, payload);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to update role:', error);
@@ -53,7 +53,7 @@ export const updateRole = async (payload: Partial<Role>, id: number) => {
 
 export const deleteRole = async (id: number) => {
 	try {
-		const res = await axios.delete<Role>(`${API_URL}/${id}`);
+		const res = await axiosClient.delete<Role>(`${API_URL}/${id}`);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to delete role:', error);

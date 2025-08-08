@@ -2,6 +2,7 @@ import { ProductStatus } from 'constants/productStatus';
 import { BaseQuery } from './commonService';
 import { ProductImage } from './productImageService';
 import axios from 'axios';
+import axiosClient from './axiosClient';
 
 const API_URL = `${import.meta.env.VITE_APP_URL}/products`;
 
@@ -14,9 +15,11 @@ export interface Product {
 	quantity: number;
 	description?: string;
 	categoryId: number;
+	categoryName?: string;
 	config?: JSON;
 
 	productImages?: ProductImage[];
+	newImages?: File[];
 	createdAt?: Date;
 	updatedAt?: Date;
 	createdBy?: number;
@@ -53,7 +56,7 @@ export const fetchData = async (query: ProductQuery = {}) => {
 
 export const createProduct = async (payload: Omit<Product, 'id'>) => {
 	try {
-		const res = await axios.post<Product>(API_URL, payload);
+		const res = await axiosClient.post<Product>(API_URL, payload);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to create product:', error);
@@ -63,7 +66,7 @@ export const createProduct = async (payload: Omit<Product, 'id'>) => {
 
 export const updateProduct = async (id: number, payload: Partial<Product>) => {
 	try {
-		const res = await axios.put<Product>(`${API_URL}/${id}`, payload);
+		const res = await axiosClient.put<Product>(`${API_URL}/${id}`, payload);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to update product:', error);
@@ -73,7 +76,7 @@ export const updateProduct = async (id: number, payload: Partial<Product>) => {
 
 export const deleteProduct = async (id: number) => {
 	try {
-		const res = await axios.delete<Product>(`${API_URL}/${id}`);
+		const res = await axiosClient.delete<Product>(`${API_URL}/${id}`);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to delete product:', error);

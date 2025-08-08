@@ -1,6 +1,5 @@
-import axios from 'axios';
 import { BaseQuery } from './commonService';
-import { unescape } from 'querystring';
+import axiosClient from './axiosClient';
 
 const API_URL = `${import.meta.env.VITE_APP_URL}/permissions`;
 
@@ -25,7 +24,7 @@ export const fetchData = async (query: PermissionQuery = {}) => {
 	});
 
 	try {
-		const res = await axios.get<{ data: Permission[]; total: number }>(`${API_URL}?${params.toString()}`);
+		const res = await axiosClient.get<{ data: Permission[]; total: number }>(`${API_URL}?${params.toString()}`);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to fetch permissions:', error);
@@ -35,7 +34,7 @@ export const fetchData = async (query: PermissionQuery = {}) => {
 
 export const createPermission = async (payload: Omit<Permission, 'id'>) => {
 	try {
-		const res = await axios.post<Permission>(API_URL, payload);
+		const res = await axiosClient.post<Permission>(API_URL, payload);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to create permission:', error);
@@ -45,7 +44,7 @@ export const createPermission = async (payload: Omit<Permission, 'id'>) => {
 
 export const updatePermission = async (id: number, payload: Partial<Permission>) => {
 	try {
-		const res = await axios.put<Permission>(`${API_URL}/${id}`, payload);
+		const res = await axiosClient.put<Permission>(`${API_URL}/${id}`, payload);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to update permission:', error);
@@ -55,7 +54,7 @@ export const updatePermission = async (id: number, payload: Partial<Permission>)
 
 export const deletePermission = async (id: number) => {
 	try {
-		const res = await axios.delete<Permission>(`${API_URL}/${id}`);
+		const res = await axiosClient.delete<Permission>(`${API_URL}/${id}`);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to delete permission:', error);

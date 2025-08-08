@@ -13,7 +13,7 @@ interface CategoryFormProps {
 }
 
 export default function CategoryForm({ open, onClose, onSubmit, initialData, onSuccess }: CategoryFormProps) {
-	const { form, setForm, errorMessage, setErrorMessage, successMessage, setSuccessMessage, handleSubmit } = useFormHandler<Category>(
+	const { form, setForm, handleSubmit } = useFormHandler<Category>(
 		initialData ?? null,
 		DEFAULT_CATEGORY,
 		onSubmit,

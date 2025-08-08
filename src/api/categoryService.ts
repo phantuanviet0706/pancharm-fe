@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { BaseQuery } from './commonService';
+import axiosClient from './axiosClient';
 
 const API_URL = `${import.meta.env.VITE_APP_URL}/categories`;
 
@@ -41,7 +42,7 @@ export const fetchData = async (query: CategoryQuery = {}) => {
 
 export const createCategory = async (payload: Omit<Category, 'id'>) => {
 	try {
-		const res = await axios.post<Category>(API_URL, payload);
+		const res = await axiosClient.post<Category>(API_URL, payload);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to create category:', error);
@@ -51,7 +52,7 @@ export const createCategory = async (payload: Omit<Category, 'id'>) => {
 
 export const updateCategory = async (id: number, payload: Partial<Category>) => {
 	try {
-		const res = await axios.put<Category>(`${API_URL}/${id}`, payload);
+		const res = await axiosClient.put<Category>(`${API_URL}/${id}`, payload);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to update category:', error);
@@ -61,7 +62,7 @@ export const updateCategory = async (id: number, payload: Partial<Category>) => 
 
 export const deleteCategory = async (id: number) => {
 	try {
-		const res = await axios.delete<Category>(`${API_URL}/${id}`);
+		const res = await axiosClient.delete<Category>(`${API_URL}/${id}`);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to delete category:', error);

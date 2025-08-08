@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { CollectionImage } from './collectionImageService';
 import { BaseQuery } from './commonService';
+import axiosClient from './axiosClient';
 
 const API_URL = `${import.meta.env.VITE_APP_URL}/collections`;
 
@@ -41,7 +42,7 @@ export const fetchData = async (query: CollectionQuery = {}) => {
 
 export const createCollection = async (payload: Omit<Collection, 'id'>) => {
 	try {
-		const res = await axios.post<Collection>(API_URL, payload);
+		const res = await axiosClient.post<Collection>(API_URL, payload);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to create collection:', error);
@@ -51,7 +52,7 @@ export const createCollection = async (payload: Omit<Collection, 'id'>) => {
 
 export const updateCollection = async (id: number, payload: Partial<Collection>) => {
 	try {
-		const res = await axios.put<Collection>(`${API_URL}/${id}`, payload);
+		const res = await axiosClient.put<Collection>(`${API_URL}/${id}`, payload);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to update collection:', error);
@@ -61,7 +62,7 @@ export const updateCollection = async (id: number, payload: Partial<Collection>)
 
 export const deleteCollection = async (id: number) => {
 	try {
-		const res = await axios.delete<Collection>(`${API_URL}/${id}`);
+		const res = await axiosClient.delete<Collection>(`${API_URL}/${id}`);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to delete collection:', error);
