@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import CategoryTable from './CategoryTable';
 import CategoryForm from './CategoryForm';
 import GenericSnackbar from 'components/Snackbar/GenericSnackbar';
+import CategoryDetail from './CategoryDetail';
 
 export default function CategoryPage() {
 	const [page, setPage] = useState(0);
@@ -133,26 +134,20 @@ export default function CategoryPage() {
 				<Pagination count={totalPages} page={page + 1} onChange={(e, value) => setPage(value - 1)} color="primary" />
 			</div>
 
-			<Dialog open={detailOpen} onClose={() => setDetailOpen(false)} maxWidth="sm" fullWidth>
-				<DialogTitle>Category Detail</DialogTitle>
-				<DialogContent dividers>
-					{detailData ? (
-						<>
-							<p>
-								<strong>ID:</strong> {detailData.id}
-							</p>
-							<p>
-								<strong>Name:</strong> {detailData.name}
-							</p>
-						</>
-					) : (
-						<p>No data available</p>
-					)}
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={() => setDetailOpen(false)}>Close</Button>
-				</DialogActions>
-			</Dialog>
+			<CategoryDetail
+				open={detailOpen}
+				category={detailData}
+				onClose={() => setDetailOpen(false)}
+				onEdit={(cat) => {
+					setEditData(cat);
+					setFormOpen(true);
+					setDetailOpen(false);
+				}}
+				onDelete={(id) => {
+					handleDelete(id);
+					setDetailOpen(false);
+				}}
+			/>
 
 			<GenericSnackbar
 				code={snackbarCode}

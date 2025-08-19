@@ -7,7 +7,11 @@ import { Link } from 'react-router-dom';
 
 // -----------------------|| NAV LEFT ||-----------------------//
 
-export default function NavLeft() {
+interface NavLeftProps {
+	user?: any;
+}
+
+export default function NavLeft({ user }: NavLeftProps) {
 	return (
 		<ListGroup as="ul" bsPrefix=" " className="list-unstyled">
 			<Dropdown as="li" className="pc-h-item">

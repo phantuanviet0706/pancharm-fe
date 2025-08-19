@@ -64,5 +64,7 @@ File: style.css
 
 @import 'react-common.scss';
 
-@import './common/common.scss';
-@import './auth/auth.scss';
+@import './common/layout.scss';
+@import './auth/layout.scss';
+@import './company/layout.scss';
+@import './user/layout.scss';

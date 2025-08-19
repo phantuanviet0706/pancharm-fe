@@ -3,13 +3,13 @@
 // ============================
 
 .pc-header {
-	background: var(--pc-header-background);
+	// background: var(--pc-header-background);
 	color: var(--pc-header-color);
 	min-height: $header-height;
-	box-shadow: var(--pc-header-shadow);
-	backdrop-filter: blur(7px);
-	position: fixed;
-	left: $sidebar-width;
+	// box-shadow: var(--pc-header-shadow);
+	// backdrop-filter: blur(7px);
+	position: absolute;
+	// left: $sidebar-width;
 	right: 0;
 	z-index: 1025;
 

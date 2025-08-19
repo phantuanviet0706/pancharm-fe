@@ -1,0 +1,32 @@
+.sep {
+	border: 1px solid #f0f0f0;
+	margin-bottom: 0.75rem;
+}
+
+.item {
+	display: flex;
+	margin-bottom: 20px;
+
+	.label {
+		flex: 1 1 20%;
+
+		.item-icons {
+			margin-right: 0.5rem;
+		}
+
+		.item-content {
+			font-size: 14px;
+			position: relative;
+			top: 0.15rem;
+		}
+	}
+
+	.value {
+		flex: 1 1 80%;
+	}
+}
+
+@import './scrollbar.scss';
+@import './side-btn.scss';
+@import './text.scss';
+@import './form.scss';

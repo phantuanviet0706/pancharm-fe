@@ -26,6 +26,91 @@ const menuItems = {
 			]
 		},
 		{
+			id: 'system',
+			title: 'SYSTEM',
+			subtitle: 'Users & Company Config',
+			type: 'group',
+			children: [
+				{
+					id: 'user',
+					title: 'Users',
+					type: 'item',
+					url: '/users',
+					icon: 'material-icons-two-tone',
+					iconname: 'person'
+				},
+				{
+					id: 'company',
+					title: 'Company',
+					type: 'item',
+					url: '/company',
+					icon: 'material-icons-two-tone',
+					iconname: 'business'
+				}
+			]
+		},
+		{
+			id: 'management',
+			title: 'MANAGEMENT',
+			subtitle: 'Product, Category and more',
+			type: 'group',
+			children: [
+				{
+					id: 'categories',
+					title: 'Categories',
+					type: 'item',
+					url: '/categories',
+					icon: 'material-icons-two-tone',
+					iconname: 'category'
+				},
+				{
+					id: 'collections',
+					title: 'Collections',
+					type: 'item',
+					url: '/collections',
+					icon: 'material-icons-two-tone',
+					iconname: 'collections_bookmark'
+				},
+				{
+					id: 'products',
+					title: 'Products',
+					type: 'item',
+					url: '/products',
+					icon: 'material-icons-two-tone',
+					iconname: 'shopping_bag'
+				}
+			]
+		},
+		{
+			id: 'authorization',
+			title: 'AUTH',
+			subtitle: 'Manage Authorization',
+			type: 'group',
+			icon: 'icon-auth',
+			children: [
+				{
+					id: 'roles',
+					title: 'Roles',
+					type: 'item',
+					url: '/roles',
+					icon: 'material-icons-two-tone',
+					iconname: 'admin_panel_settings'
+				},
+				{
+					id: 'permissions',
+					title: 'Permissions',
+					type: 'item',
+					url: '/permissions',
+					icon: 'material-icons-two-tone',
+					iconname: 'vpn_key'
+				}
+			]
+		},
+
+		// Disable while build production
+		//-------------------------------------------------------------------------//
+
+		{
 			id: 'ui-element',
 			title: 'ELEMENTS',
 			subtitle: 'UI Components',
@@ -177,64 +262,9 @@ const menuItems = {
 					iconname: 'power_off'
 				}
 			]
-		},
-		{
-			id: 'management',
-			title: 'MANAGEMENT',
-			subtitle: 'Product, Category and more',
-			type: 'group',
-			children: [
-				{
-					id: 'categories',
-					title: 'Categories',
-					type: 'item',
-					url: '/categories',
-					icon: 'material-icons-two-tone',
-					iconname: 'category'
-				},
-				{
-					id: 'collections',
-					title: 'Collections',
-					type: 'item',
-					url: '/collections',
-					icon: 'material-icons-two-tone',
-					iconname: 'collections_bookmark'
-				},
-				{
-					id: 'products',
-					title: 'Products',
-					type: 'item',
-					url: '/products',
-					icon: 'material-icons-two-tone',
-					iconname: 'shopping_bag'
-				}
-			]
-		},
-		{
-			id: 'authorization',
-			title: 'AUTH',
-			subtitle: 'Manage Authorization',
-			type: 'group',
-			icon: 'icon-auth',
-			children: [
-				{
-					id: 'roles',
-					title: 'Roles',
-					type: 'item',
-					url: '/roles',
-					icon: 'material-icons-two-tone',
-					iconname: 'admin_panel_settings'
-				},
-				{
-					id: 'permissions',
-					title: 'Permissions',
-					type: 'item',
-					url: '/permissions',
-					icon: 'material-icons-two-tone',
-					iconname: 'vpn_key'
-				}
-			]
 		}
+
+		//-------------------------------------------------------------------------//
 	]
 };
 

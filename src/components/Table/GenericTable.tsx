@@ -17,7 +17,7 @@ interface GenericTableProps<T> {
 	maxHeight?: number | string;
 }
 
-export default function GenericTable<T>({ data, columns, rowKey, maxHeight = 400 }: GenericTableProps<T>) {
+export default function GenericTable<T>({ data, columns, rowKey, maxHeight = '24rem' }: GenericTableProps<T>) {
 	if (!data || data.length == 0) return <p>No data found.</p>;
 
 	const headerStyle = {
@@ -69,14 +69,18 @@ export default function GenericTable<T>({ data, columns, rowKey, maxHeight = 400
 										key={idx}
 										style={{
 											...cellStyle,
-                                            ...col.cellStyle,
+											...col.cellStyle,
 											textAlign: col.align || 'left',
 											width: col.width || 'auto'
 										}}
 										className={col.className}
 										onClick={() => col.onClick?.(row)}
 									>
-										{col.render ? col.render(row) : (<span title={row[col.key as keyof T] as any}>{row[col.key as keyof T] as any}</span>)}
+										{col.render ? (
+											col.render(row)
+										) : (
+											<span title={row[col.key as keyof T] as any}>{row[col.key as keyof T] as any}</span>
+										)}
 									</td>
 								))}
 							</tr>

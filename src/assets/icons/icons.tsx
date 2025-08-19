@@ -79,6 +79,74 @@ export const icons = {
 			<line x1="5" y1="12" x2="19" y2="12" />
 			<polyline points="12 5 19 12 12 19" />
 		</svg>
+	),
+
+	iconId: (
+		<svg
+			width="18"
+			height="18"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			strokeWidth="2"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			aria-hidden="true"
+		>
+			<rect x="3" y="4" width="18" height="16" rx="2" />
+			<path d="M7 8h10M7 12h6M7 16h4" />
+		</svg>
+	),
+
+	iconLocation: (
+		<svg
+			width="18"
+			height="18"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			strokeWidth="2"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			aria-hidden="true"
+		>
+			<path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0Z" />
+			<circle cx="12" cy="10" r="3" />
+		</svg>
+	),
+
+	iconTag: (
+		<svg
+			width="18"
+			height="18"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			strokeWidth="2"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			aria-hidden="true"
+		>
+			<path d="M20.59 13.41 12 22l-9-9 8.59-8.59a2 2 0 0 1 2.82 0L22 10.59a2 2 0 0 1 0 2.82Z" />
+			<circle cx="7.5" cy="12.5" r="1.5" />
+		</svg>
+	),
+
+	iconBuilding: (
+		<svg
+			width="18"
+			height="18"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			strokeWidth="2"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			aria-hidden="true"
+		>
+			<rect x="3" y="3" width="18" height="18" rx="2" />
+			<path d="M7 3v18M17 3v18M3 8h18M3 16h18" />
+		</svg>
 	)
 };
 

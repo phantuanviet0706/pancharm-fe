@@ -21,6 +21,8 @@ const PermissionPage = lazy(() => import('../views/permissions/PermissionPage'))
 const RolePage = lazy(() => import('../views/roles/RolePage'));
 const CategoryPage = lazy(() => import('../views/categories/CategoryPage'));
 const ProductPage = lazy(() => import('../views/products/ProductPage'));
+const CompanyPage = lazy(() => import('../views/company/CompanyPage'));
+const UserPage = lazy(() => import('../views/users/UserPage'));
 
 const MainRoutes = {
 	path: '/',
@@ -77,6 +79,16 @@ const MainRoutes = {
 				{
 					path: '/products',
 					element: <ProductPage />
+				},
+
+				{
+					path: '/company',
+					element: <CompanyPage />
+				},
+
+				{
+					path: '/users',
+					element: <UserPage />
 				}
 			]
 		},

@@ -12,7 +12,7 @@ interface DialogAction {
 interface GenericDialogProps {
 	open: boolean;
 	title: string;
-	children: React.ReactNode;
+	children?: React.ReactNode;
 	actions?: DialogAction[];
 	onClose: () => void;
 	maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';

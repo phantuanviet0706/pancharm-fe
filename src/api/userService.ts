@@ -2,12 +2,15 @@ import { UserMembership } from 'constants/userMembership';
 import { UserStatus } from 'constants/userStatus';
 import { BaseQuery } from './commonService';
 import axios from 'axios';
+import axiosClient from './axiosClient';
+import { Role } from './roleService';
 
 const API_URL = `${import.meta.env.VITE_APP_URL}/users`;
 
 export interface User {
 	id?: number;
 	username: string;
+	password?: string;
 	email: string;
 	fullname: string;
 	dob?: Date;
@@ -22,6 +25,8 @@ export interface User {
 
 	createdAt?: Date;
 	updatedAt?: Date;
+
+	roles?: Role[];
 }
 
 export interface UserQuery extends BaseQuery {}
@@ -85,6 +90,16 @@ export const getUser = async (id: number) => {
 		return res.data;
 	} catch (error) {
 		console.error('Failed to get user:', error);
+		throw error;
+	}
+};
+
+export const getMe = async () => {
+	try {
+		const res = await axiosClient.get<User>(`${API_URL}/me`);
+		return res.data;
+	} catch (error) {
+		console.error('Failed to get my info:', error);
 		throw error;
 	}
 };

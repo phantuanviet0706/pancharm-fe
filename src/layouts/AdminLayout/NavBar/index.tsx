@@ -4,12 +4,15 @@ import { useContext } from 'react';
 import NavLeft from './NavLeft';
 import NavRight from './NavRight';
 import { ConfigContext } from 'contexts/ConfigContext';
+import { useMe } from 'hooks/useMe';
 
 // -----------------------|| NAV BAR ||-----------------------//
 
 export default function NavBar() {
 	const configContext = useContext(ConfigContext);
 	const { headerBackColor, collapseTabMenu, collapseHeaderMenu } = configContext.state;
+
+	const { me, loading, error } = useMe();
 
 	let headerClass = ['pc-header', headerBackColor];
 	if (collapseHeaderMenu) {
@@ -24,11 +27,9 @@ export default function NavBar() {
 	let navBar = (
 		<>
 			<div className="header-wrapper">
-				<div className={mobDrpClass.join(' ')}>
-					<NavLeft />
-				</div>
+				<div className={mobDrpClass.join(' ')}>{/* <NavLeft user={me} /> */}</div>
 				<div className="ms-auto">
-					<NavRight />
+					<NavRight user={me} />
 				</div>
 			</div>
 			{(collapseTabMenu || collapseHeaderMenu) && <div className="pc-md-overlay" />}

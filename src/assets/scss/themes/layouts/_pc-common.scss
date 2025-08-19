@@ -11,7 +11,6 @@
 	.pcoded-content {
 		padding-left: 30px;
 		padding-right: 30px;
-		padding-top: 30px;
 	}
 
 	.page-header + .row {
@@ -38,12 +37,13 @@
 	position: fixed;
 	display: flex;
 	align-items: center;
-	top: $header-height;
+	top: 0px;
 	left: $sidebar-width;
 	right: 0;
 	z-index: 1023;
 	min-height: 55px;
 	padding: 13px 30px;
+	height: $header-height;
 
 	.page-block {
 		width: 100%;
@@ -97,7 +97,7 @@
 
 .page-content {
 	position: relative;
-	top: calc($header-height - 4vh);
+	top: calc($header-height - 6vh);
 }
 
 .upgrade-card {
