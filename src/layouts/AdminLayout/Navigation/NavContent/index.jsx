@@ -13,14 +13,16 @@ import { ConfigContext } from 'contexts/ConfigContext';
 import SimpleBar from 'simplebar-react';
 
 // assets
-import logo from 'assets/images/logo.svg';
+import defaultCompany from 'assets/images/default-company.png';
 
 // -----------------------|| NAV CONTENT ||-----------------------//
 
 export default function NavContent({ navigation, activeNav }) {
 	const configContext = useContext(ConfigContext);
 
-	const { collapseLayout } = configContext.state;
+	const { state } = configContext.state;
+
+	const company = configContext.state?.company;
 
 	const navItems = navigation.map((item) => {
 		let navItem = <></>;
@@ -58,7 +60,7 @@ export default function NavContent({ navigation, activeNav }) {
 		</SimpleBar>
 	);
 
-	if (collapseLayout) {
+	if (state) {
 		navContentNode = (
 			<ListGroup variant="flush" as="ul" bsPrefix=" " className="pc-navbar">
 				{navItems}
@@ -69,7 +71,12 @@ export default function NavContent({ navigation, activeNav }) {
 	const mHeader = (
 		<div className="m-header">
 			<Link to="/dashboard/sales" className="b-brand">
-				<img src={logo} alt="" className="logo logo-lg" />
+				<div className="logo-container">
+					<div className="logo-avatar">
+						<img src={company?.avatar ?? defaultCompany} alt="Default Company" />
+					</div>
+					<div className="company-name">{company?.name ?? 'Company'}</div>
+				</div>
 			</Link>
 		</div>
 	);

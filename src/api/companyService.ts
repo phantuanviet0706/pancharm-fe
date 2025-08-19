@@ -13,7 +13,7 @@ export interface Company {
 	companyInfos: CompanyInfo[];
 }
 
-export const updateCompany = async (payload: Partial<Company>) => {
+export const updateCompany = async (payload: FormData | Partial<Company>) => {
 	try {
 		const res = await axiosClient.put(API_URL, payload);
 		return res.data;

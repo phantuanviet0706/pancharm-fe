@@ -7,6 +7,8 @@ import { Button } from '@mui/material';
 import CompanyInfoTable from './info/CompanyInfoTable';
 import { CompanyInfo, deleteCompanyInfo, updateCompanyInfo } from 'api/companyInfoService';
 import GenericLabel from 'components/Dialog/GenericLabel';
+import GenericPreviewDialog from 'components/Dialog/GenericPreviewDialog';
+import FilePreviewButton from 'components/Button/FilePreviewButton';
 
 export default function CompanyPage() {
 	const { data, setData, loading, error } = useCompany();
@@ -15,6 +17,7 @@ export default function CompanyPage() {
 	const [formOpen, setFormOpen] = useState(false);
 	const [snackbarCode, setSnackbarCode] = useState<number>(0);
 	const [snackbarMessage, setSnackbarMessage] = useState<string>('');
+	const [open, setOpen] = useState<boolean>(false);
 
 	const showSnackbar = (code: number, message: string) => {
 		setSnackbarCode(code);
@@ -22,12 +25,23 @@ export default function CompanyPage() {
 		setTimeout(() => setSnackbarCode(0), 3000);
 	};
 
-	const handleUpdate = async (patch: Partial<Company>) => {
+	const handleUpdate = async (patch: FormData | Partial<Company>) => {
 		try {
 			const res = await updateCompany(patch);
 			if (res?.code === 1) {
 				showSnackbar(1, res?.message || 'Cập nhật thành công');
 				setFormOpen(false);
+				setData(res?.result);
+
+				let appData = localStorage.getItem('APP_CONFIG');
+				if (appData) {
+					appData = JSON.parse(appData);
+					if (appData?.company) {
+						appData.company = res?.result;
+						localStorage.setItem('APP_CONFIG', JSON.stringify(appData));
+					}
+				}
+				window.location.reload();
 			} else {
 				showSnackbar(res?.code ?? -1, res?.message || 'Cập nhật thất bại');
 			}
@@ -96,19 +110,35 @@ export default function CompanyPage() {
 					<GenericLabel label="Tên" icon={icons.iconTag} value={data?.name || '—'} truncate />
 					<GenericLabel label="Địa chỉ" icon={icons.iconLocation} value={data?.address || '—'} truncate />
 					<GenericLabel label="Mã số thuế" icon={icons.iconId} value={data?.taxcode || '—'} truncate />
+					<div className="bank-info">
+						<div className="item">
+							<div className="label">
+								<span className="item-icons">{icons.bankAttachment}</span>
+								<span className="item-content">Thông tin chuyển khoản</span>
+							</div>
+							<div className="value">
+								<FilePreviewButton
+									url={data?.bankAttachment}
+									title="Thông tin chuyển khoản"
+									fileName="bank-attachment"
+									startIcon={icons.bankAttachment}
+								/>
+							</div>
+						</div>
+					</div>
 				</div>
 
 				<CompanyForm open={formOpen} initialData={data as Company} onSubmit={handleUpdate} onClose={() => setFormOpen(false)} />
 			</div>
 
-			<div className="company-info-page">
+			{/* <div className="company-info-page">
 				<CompanyInfoTable
 					companyInfos={data?.companyInfos ?? []}
 					onEdit={handleEditCompanyInfos}
 					onDelete={handleDeleteCompanyInfos}
 					onUserDetail={handleGetUserDetail}
 				></CompanyInfoTable>
-			</div>
+			</div> */}
 		</div>
 	);
 }

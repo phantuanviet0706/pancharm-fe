@@ -147,6 +147,33 @@ export const icons = {
 			<rect x="3" y="3" width="18" height="18" rx="2" />
 			<path d="M7 3v18M17 3v18M3 8h18M3 16h18" />
 		</svg>
+	),
+
+	bankAttachment: (
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="18"
+			height="18"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			strokeWidth={1.5}
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			role="img"
+			aria-labelledby={`bank-attach-title bank-attach-desc`}
+		>
+			<title id="bank-attach-title">'Bank Attachment'</title>
+			<desc id="bank-attach-desc">An icon of a bank building with a paperclip overlay</desc>
+
+			<polygon points="4 8 12 4 20 8" />
+			<line x1="6" y1="9" x2="18" y2="9" />
+			<line x1="8" y1="10" x2="8" y2="17" />
+			<line x1="12" y1="10" x2="12" y2="17" />
+			<line x1="16" y1="10" x2="16" y2="17" />
+			<rect x="4" y="18" width="16" height="2" rx="0.5" />
+			<path d="M17 11.5v3.8a2.2 2.2 0 1 1-4.4 0v-3.8a1.6 1.6 0 1 1 3.2 0v3.2a1 1 0 1 1-2 0v-2.7" />
+		</svg>
 	)
 };
 
