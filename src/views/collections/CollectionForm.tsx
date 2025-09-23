@@ -1,62 +1,30 @@
-import { Autocomplete, TextField } from '@mui/material';
-import { CategoryQuery, fetchData } from 'api/categoryService';
-import { ProductImage } from 'api/productImageService';
-import { DEFAULT_PRODUCT, Product, ProductQuery } from 'api/productService';
+import { TextField } from '@mui/material';
+import { Collection, DEFAULT_COLLECTION } from 'api/collectionService';
 import CommonDialog from 'components/Dialog/GenericDialog';
 import { useFormHandler } from 'hooks/useFormHandler';
 import { useEffect, useState } from 'react';
 
 type ActionType = 'create';
 
-interface ProductFormProps {
+interface CollectionFormProps {
 	open: boolean;
 	onClose: () => void;
-	onSubmit: (data: Partial<Product>) => Promise<{ code: number; message: string }>;
-	initialData?: Product | null;
+	onSubmit: (data: Partial<Collection>) => Promise<{ code: number; message: string }>;
+	initialData?: Collection | null;
 	onSuccess?: (code: number, message: string) => void;
 	action?: ActionType;
 }
 
-export default function ProductForm({ open, onClose, onSubmit, initialData, onSuccess }: ProductFormProps) {
-	const { form, setForm, handleSubmit } = useFormHandler<Product>(
-		initialData ?? null,
-		DEFAULT_PRODUCT,
-		onSubmit,
-		open,
-		(form: Partial<Product>) => ({
-			...form,
-			categoryId: form.categoryId
-		})
-	);
+export default function CollectionForm({ open, onClose, onSubmit, initialData, onSuccess }: CollectionFormProps) {
+	const { form, setForm, handleSubmit } = useFormHandler<Collection>(initialData ?? null, DEFAULT_COLLECTION, onSubmit, open);
 
-	const [categoryOptions, setCategoryOptions] = useState<Product[]>([]);
 	const [loading, setLoading] = useState(false);
-	const [autocompleteOpen, setAutocompleteOpen] = useState(false);
-
 	const [deletedImageIds, setDeletedImageIds] = useState<number[]>([]);
-
-	const handleCategorySearch = async (query: CategoryQuery) => {
-		query.limit = 0;
-		try {
-			setLoading(true);
-			const res = await fetchData(query);
-			let categoryOpts = res && res.result ? res.result.content : [];
-			setCategoryOptions(categoryOpts);
-		} catch (err) {
-			console.error('Failed to fetch categories:', err);
-			setCategoryOptions([]);
-		} finally {
-			setLoading(false);
-		}
-	};
 
 	useEffect(() => {
 		if (open && initialData) {
 			setForm(initialData);
 			setDeletedImageIds([]);
-			if (initialData.categoryId) {
-				handleCategorySearch({});
-			}
 		}
 		if (!open) {
 			setDeletedImageIds([]);
@@ -67,7 +35,7 @@ export default function ProductForm({ open, onClose, onSubmit, initialData, onSu
 		<>
 			<CommonDialog
 				open={open}
-				title={initialData ? 'Edit Product' : 'Create Product'}
+				title={initialData ? 'Edit Collection' : 'Create Collection'}
 				onClose={onClose}
 				maxWidth="md"
 				actions={[
@@ -86,11 +54,9 @@ export default function ProductForm({ open, onClose, onSubmit, initialData, onSu
 
 								formData.append('name', form.name || '');
 								formData.append('slug', form.slug || '');
-								formData.append('quantity', String(form.quantity || ''));
-								formData.append('unitPrice', String(form.unitPrice || ''));
-								formData.append('categoryId', String(form.categoryId || ''));
+								formData.append('description', form.description || '');
 
-								form.productImages
+								form.collectionImages
 									?.filter((img) => !deletedImageIds.includes(img.id!))
 									.forEach((img) => {
 										formData.append('existingImages', img.id!.toString());
@@ -101,7 +67,7 @@ export default function ProductForm({ open, onClose, onSubmit, initialData, onSu
 								});
 
 								form.newImages?.forEach((file) => {
-									formData.append('productImages', file);
+									formData.append('collectionImages', file);
 								});
 
 								const res = await onSubmit(formData as unknown as Partial<Product>);
@@ -113,7 +79,7 @@ export default function ProductForm({ open, onClose, onSubmit, initialData, onSu
 				]}
 			>
 				<TextField
-					label="Name *"
+					label="Tên *"
 					fullWidth
 					sx={{ mt: 2 }}
 					value={form.name || ''}
@@ -121,67 +87,11 @@ export default function ProductForm({ open, onClose, onSubmit, initialData, onSu
 				/>
 
 				<TextField
-					label="Slug"
+					label="Mã"
 					fullWidth
 					sx={{ mt: 2 }}
 					value={form.slug || ''}
 					onChange={(e) => setForm({ ...form, slug: e.target.value })}
-				/>
-
-				<div className="form-group gi-2">
-					<TextField
-						label="Quantity *"
-						fullWidth
-						sx={{ mt: 2 }}
-						value={form.quantity || ''}
-						onChange={(e) => setForm({ ...form, quantity: Number(e.target.value) || 1 })}
-					/>
-					<TextField
-						label="Unit Price *"
-						fullWidth
-						sx={{ mt: 2 }}
-						value={form.unitPrice || ''}
-						onChange={(e) => setForm({ ...form, unitPrice: Number(e.target.value) || 0 })}
-					/>
-				</div>
-
-				<Autocomplete
-					open={autocompleteOpen}
-					onOpen={() => {
-						setAutocompleteOpen(true);
-						if (categoryOptions.length === 0) {
-							handleCategorySearch({});
-						}
-					}}
-					onClose={() => setAutocompleteOpen(false)}
-					options={categoryOptions || []}
-					getOptionLabel={(option) => option.name}
-					isOptionEqualToValue={(option, value) => option.id === value.id}
-					value={
-						categoryOptions.find((cat) => cat.id === form.categoryId) ??
-						(form.categoryId && form.categoryName ? { id: form.categoryId, name: form.categoryName } : null)
-					}
-					onChange={(_, newValue) => {
-						setForm({
-							...form,
-							categoryId: newValue?.id
-						});
-					}}
-					onInputChange={(_, value) => handleCategorySearch({ keyword: value })}
-					loading={loading}
-					renderInput={(params) => (
-						<TextField
-							{...params}
-							label="Category *"
-							placeholder="Search Category"
-							sx={{ mt: 2 }}
-							slotProps={{
-								inputLabel: {
-									shrink: true
-								}
-							}}
-						/>
-					)}
 				/>
 
 				<input
@@ -198,7 +108,7 @@ export default function ProductForm({ open, onClose, onSubmit, initialData, onSu
 					style={{ marginTop: 16 }}
 				/>
 
-				{form.productImages
+				{form.collectionImages
 					?.filter((img) => !deletedImageIds.includes(img.id!))
 					.map((img, index) => (
 						<div key={img.id || index} style={{ position: 'relative', display: 'inline-block', margin: 8 }}>

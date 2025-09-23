@@ -1,23 +1,23 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
-import { createProduct, deleteProduct, Product, updateProduct } from 'api/productService';
-import { useProducts } from 'hooks/useProducts';
+import { Collection, createCollection, deleteCollection, updateCollection } from 'api/collectionService';
+import { useCollections } from 'hooks/useCollections';
 import { useMemo, useState } from 'react';
-import ProductTable from './ProductTable';
+import CollectionTable from './CollectionTable';
+import CollectionForm from './CollectionForm';
 import GenericSnackbar from 'components/Snackbar/GenericSnackbar';
-import ProductForm from './ProductForm';
 
-export default function ProductPage() {
+export default function CollectionPage() {
 	const [page, setPage] = useState(0);
 	const [searchText, setSearchText] = useState('');
 
 	const query = useMemo(() => ({ page, limit: 50, keyword: searchText }), [page, searchText]);
 
-	const { products, loading, error, setProducts, total, totalPages } = useProducts(query);
+	const { collections, loading, error, setCollections, total, totalPages } = useCollections(query);
 
 	const [formOpen, setFormOpen] = useState(false);
-	const [editData, setEditData] = useState<Product | null>(null);
+	const [editData, setEditData] = useState<Collection | null>(null);
 
-	const [detailData, setDetailData] = useState<Product | null>(null);
+	const [detailData, setDetailData] = useState<Collection | null>(null);
 	const [detailOpen, setDetailOpen] = useState(false);
 
 	const [snackbarCode, setSnackbarCode] = useState<number>(0);
@@ -28,13 +28,16 @@ export default function ProductPage() {
 		setSnackbarMessage(message);
 	};
 
-	const handleCreate = async (data: Partial<Product>) => {
+	const handleCreate = async (data: Partial<Collection>) => {
 		try {
-			const res = await createProduct(data as Omit<Product, 'id'>);
+			const res = await createCollection(data as Omit<Collection, 'id'>);
 			if (res?.code === 1 && res?.result) {
-				setProducts([...products, res.result]);
+				setCollections([...collections, res.result]);
 			}
-			return { code: res?.code, message: res?.message };
+			return {
+				code: res?.code,
+				message: res?.message
+			};
 		} catch (err: any) {
 			return {
 				code: -1,
@@ -43,14 +46,17 @@ export default function ProductPage() {
 		}
 	};
 
-	const handleUpdate = async (data: Partial<Product>) => {
+	const handleUpdate = async (data: Partial<Collection>) => {
 		if (!data.id) return { code: -1, message: 'Missing ID for update' };
 		try {
-			const res = await updateProduct(data.id, data);
+			const res = await updateCollection(data.id, data);
 			if (res?.code === 1 && res?.result) {
-				setProducts(products.map((p) => (p.id === res.result.id ? res.result : p)));
+				setCollections(collections.map((p) => (p.id === res.result ? res.result : p)));
 			}
-			return { code: res?.code, message: res?.message };
+			return {
+				code: res?.code,
+				message: res?.message
+			};
 		} catch (err: any) {
 			return {
 				code: -1,
@@ -61,7 +67,7 @@ export default function ProductPage() {
 
 	const handleDelete = async (id: number) => {
 		try {
-			const res = await deleteProduct(id);
+			const res = await deleteCollection(id);
 			if (res?.code === 1) {
 				return window.location.reload();
 			}
@@ -75,23 +81,23 @@ export default function ProductPage() {
 	};
 
 	const handleDetail = async (id: number) => {
-		const prod = products.find((c) => c.id === id);
-		if (prod) {
-			setDetailData(prod);
+		const collection = collections.find((c) => c.id === id);
+		if (collection) {
+			setDetailData(collection);
 			setDetailOpen(true);
 		}
 	};
 
-	if (loading) return <p>Loading ...</p>;
-	if (error) return <p>Failed to load products</p>;
+	if (loading) return <p>Đang tải ...</p>;
+	if (error) return <p>Có lỗi khi tải bộ sưu tập</p>;
 
 	return (
 		<div style={{ position: 'relative' }}>
-			<h1>Products</h1>
+			<h1>Bộ sưu tập</h1>
 			<div className="side-btn">
 				<TextField
 					className="search-box-wrapper"
-					label="Search"
+					label="Tìm kiếm"
 					variant="outlined"
 					size="small"
 					fullWidth
@@ -110,11 +116,11 @@ export default function ProductPage() {
 						setFormOpen(true);
 					}}
 				>
-					+ Create product
+					+ Tạo bộ sưu tập
 				</Button>
 			</div>
-			<ProductTable
-				products={products}
+			<CollectionTable
+				collections={collections}
 				onEdit={(perm) => {
 					setEditData(perm);
 					setFormOpen(true);
@@ -122,33 +128,13 @@ export default function ProductPage() {
 				onDelete={handleDelete}
 				onDetail={handleDetail}
 			/>
-			<ProductForm
+			<CollectionForm
 				open={formOpen}
 				onClose={() => setFormOpen(false)}
 				onSubmit={(data) => (editData ? handleUpdate({ ...editData, ...data }) : handleCreate(data))}
 				initialData={editData}
 				onSuccess={handleFormSuccess}
 			/>
-			<Dialog open={detailOpen} onClose={() => setDetailOpen(false)} maxWidth="sm" fullWidth>
-				<DialogTitle>Product Detail</DialogTitle>
-				<DialogContent dividers>
-					{detailData ? (
-						<>
-							<p>
-								<strong>ID:</strong> {detailData.id}
-							</p>
-							<p>
-								<strong>Name:</strong> {detailData.name}
-							</p>
-						</>
-					) : (
-						<p>No data available</p>
-					)}
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={() => setDetailOpen(false)}>Close</Button>
-				</DialogActions>
-			</Dialog>
 
 			<GenericSnackbar
 				code={snackbarCode}

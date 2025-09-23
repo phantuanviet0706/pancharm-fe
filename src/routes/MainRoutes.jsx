@@ -23,6 +23,7 @@ const CategoryPage = lazy(() => import('../views/categories/CategoryPage'));
 const ProductPage = lazy(() => import('../views/products/ProductPage'));
 const CompanyPage = lazy(() => import('../views/company/CompanyPage'));
 const UserPage = lazy(() => import('../views/users/UserPage'));
+const CollectionPage = lazy(() => import('../views/collections/CollectionPage'));
 
 const MainRoutes = {
 	path: '/',
@@ -89,6 +90,11 @@ const MainRoutes = {
 				{
 					path: '/users',
 					element: <UserPage />
+				},
+
+				{
+					path: '/collections',
+					element: <CollectionPage />
 				}
 			]
 		},

@@ -1,30 +1,27 @@
-import { Product } from 'api/productService';
+import { Collection } from 'api/collectionService';
 import ActionMenu from 'components/ActionMenu/ActionMenu';
 import GenericTable from 'components/Table/GenericTable';
 
-interface ProductTableProps {
-	products: Product[];
-	onEdit: (perm: Product) => void;
+interface CollectionTableProps {
+	collections: Collection[];
+	onEdit: (perm: Collection) => void;
 	onDelete: (id: number) => void;
 	onDetail: (id: number) => void;
 }
 
-export default function ProductTable({ products, onEdit, onDelete, onDetail }: ProductTableProps) {
-	if (!products || !products.length) {
-		return <p>Không tìm thấy sản phẩm.</p>;
+export default function CollectionTable({ collections, onEdit, onDelete, onDetail }: CollectionTableProps) {
+	if (!collections || !collections.length) {
+		return <p>Không tìm thấy bộ sưu tập.</p>;
 	}
 
 	return (
 		<GenericTable
-			data={products}
+			data={collections}
 			rowKey={(row) => (row?.id ? row.id : 0)}
 			columns={[
 				{ key: 'id', label: 'ID', width: '10vw' },
 				{ key: 'name', label: 'Tên', onClick: (row) => onDetail(row?.id ? row.id : 0) },
 				{ key: 'slug', label: 'Mã' },
-				{ key: 'quantity', label: 'Số lượng' },
-				{ key: 'unitPrice', label: 'Đơn giá' },
-				{ key: 'status', label: 'Trạng thái' },
 				{
 					key: 'actions',
 					label: 'Thao tác',

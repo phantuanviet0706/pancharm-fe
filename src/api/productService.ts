@@ -32,7 +32,7 @@ export const DEFAULT_PRODUCT: Product = {
 	slug: '',
 	status: ProductStatus.ACTIVE,
 	unitPrice: 0,
-	quantity: 0,
+	quantity: 1,
 	description: '',
 	categoryId: 0
 };

@@ -8,9 +8,12 @@ const API_URL = `${import.meta.env.VITE_APP_URL}/collections`;
 export interface Collection {
 	id?: number;
 	name: string;
+	slug?: string;
 	description?: string;
 	config?: JSON;
+
 	collectionImages?: CollectionImage[];
+	newImages?: File[];
 	createdAt?: Date;
 	updatedAt?: Date;
 	createdBy?: number;
@@ -32,7 +35,7 @@ export const fetchData = async (query: CollectionQuery = {}) => {
 	});
 
 	try {
-		const res = await axios.get<{ data: Collection[]; total: number }>(`${API_URL}?${params.toString}`);
+		const res = await axios.get<{ data: Collection[]; total: number }>(`${API_URL}?${params.toString()}`);
 		return res.data;
 	} catch (error) {
 		console.error('Failed to fetch collections:', error);
